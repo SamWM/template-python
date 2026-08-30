@@ -2,8 +2,10 @@
 
 set shell := ["bash", "-uc"]
 set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
+set unstable
+set lists
 
-uv := "python -m uv"
+uv := if which("uv") == [] { "python -m uv" } else { "uv" }
 
 # Default recipe: list available commands
 default:
