@@ -9,7 +9,7 @@ default:
 
 # Install all project and development dependencies into local .venv
 install:
-    uv sync --all-groups
+    uv sync --all-groups --all-extras
 
 # Run ruff lint and format checks
 lint:
@@ -43,3 +43,7 @@ clean:
 # Run CLI application directly
 run *ARGS:
     uv run template-python {{ARGS}}
+
+# Run GUI application directly
+gui:
+    uv run template-python-gui
