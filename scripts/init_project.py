@@ -67,6 +67,11 @@ def rename_project(
             content,
         )
         content = re.sub(
+            r'template-python-gui = "template_python.gui:main"',
+            f'{dist_name}-gui = "{module_name}.gui:main"',
+            content,
+        )
+        content = re.sub(
             r'packages = \["src/template_python"\]',
             f'packages = ["src/{module_name}"]',
             content,
@@ -120,6 +125,14 @@ uv run {dist_name}
 """
         readme_path.write_text(readme_content, encoding="utf-8")
         print("Updated README.md")
+
+    # Update Justfile
+    justfile_path = ROOT_DIR / "Justfile"
+    if justfile_path.exists():
+        just_content = justfile_path.read_text(encoding="utf-8")
+        just_content = just_content.replace("template-python", dist_name)
+        justfile_path.write_text(just_content, encoding="utf-8")
+        print("Updated Justfile")
 
     print("\n[SUCCESS] Project initialization complete!")
 
