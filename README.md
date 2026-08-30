@@ -18,7 +18,7 @@ A modern, fast, cross-platform Python project template powered by [uv](https://d
 
 ```text
 template-python/
-├── .python-version             # Pinned Python version (3.12+)
+├── .python-version             # Pinned Python version (3.13 default)
 ├── .editorconfig               # Editor whitespace/formatting consistency
 ├── .gitignore                  # Standard Python gitignore
 ├── pyproject.toml              # Build config, dependencies, ruff, pyright & pytest settings
@@ -46,7 +46,9 @@ template-python/
 
 ### 1. Prerequisites
 
-Make sure you have [uv](https://docs.astral.sh/uv/) installed:
+#### **uv** (Required)
+
+Install `uv` to manage Python versions, environments, dependencies, and builds:
 
 ```bash
 # macOS/Linux
@@ -54,6 +56,53 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Windows PowerShell
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+#### **just** (Optional, Recommended Task Runner)
+
+If you prefer using `just` commands (`just test`, `just check`, etc.) instead of the pure Python fallback (`python scripts/run.py`), install it using one of the following methods:
+
+**Option A: Prebuilt Binaries & System Package Managers**
+
+- **Windows**:
+  ```powershell
+  winget install Casey.Just
+  # or: scoop install just
+  # or: choco install just
+  ```
+
+- **macOS**:
+  ```bash
+  brew install just
+  ```
+
+- **Linux**:
+  ```bash
+  # Prebuilt binary installer script (all Linux distributions)
+  curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+
+  # Distribution package managers:
+  # Ubuntu/Debian:
+  sudo apt install just
+  # Arch Linux:
+  sudo pacman -S just
+  # Fedora:
+  sudo dnf install just
+  ```
+
+- **Direct Binary Download**:
+  Download standalone precompiled binaries for your architecture directly from the [Just GitHub Releases](https://github.com/casey/just/releases).
+
+**Option B: Via Rust / Cargo**
+
+If you have Rust/Cargo installed:
+
+```bash
+# Build from crates.io
+cargo install just
+
+# Or install precompiled binary quickly via cargo-binstall
+cargo binstall just
 ```
 
 ### 2. Environment Setup
