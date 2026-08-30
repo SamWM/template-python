@@ -32,7 +32,7 @@ def run_command(cmd: list[str], *, check: bool = True) -> int:
 
 def cmd_sync() -> None:
     """Sync virtual environment and install dev dependencies."""
-    run_command(["uv", "sync", "--all-groups"])
+    run_command(["uv", "sync", "--all-groups", "--all-extras"])
 
 
 def cmd_lint() -> None:
@@ -99,6 +99,11 @@ def cmd_clean() -> None:
     print("[SUCCESS] Workspace clean.")
 
 
+def cmd_gui() -> None:
+    """Run GUI application directly."""
+    run_command(["uv", "run", "template-python-gui"])
+
+
 def main() -> None:
     """Entrypoint for the task runner."""
     parser = argparse.ArgumentParser(
@@ -115,6 +120,7 @@ def main() -> None:
             "check",
             "build",
             "clean",
+            "gui",
         ],
         help="Task to execute",
     )
@@ -130,6 +136,7 @@ def main() -> None:
         "check": cmd_check,
         "build": cmd_build,
         "clean": cmd_clean,
+        "gui": cmd_gui,
     }
 
     task_map[args.task]()

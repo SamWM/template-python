@@ -9,6 +9,7 @@ A modern, fast, cross-platform Python project template powered by [uv](https://d
 - 🔍 **Ultra-Fast Linting & Formatting**: Configured with `ruff` for linting, code style, and imports.
 - 🎯 **Strict Static Typing**: Configured with `pyright` for robust type checking.
 - 🧪 **Comprehensive Testing**: `pytest` + `pytest-cov` with branch coverage.
+- 🖥️ **Modern Desktop GUI**: Optional PySide6 / Qt desktop interface (`template-python --gui` or `template-python-gui`).
 - 🛠️ **Cross-Platform Task Runner**: Run commands seamlessly via `just` or `python scripts/run.py`.
 - 🔄 **Quick Template Initializer**: Rename package and bootstrap metadata in one command with `scripts/init_project.py`.
 
@@ -29,12 +30,15 @@ template-python/
 │       ├── __init__.py
 │       ├── __main__.py
 │       ├── cli.py              # CLI entry point
-│       └── core.py             # Core module logic
+│       ├── core.py             # Core module logic
+│       └── gui.py              # PySide6 GUI interface (optional extra)
 ├── tests/                      # Pytest unit tests
 │   ├── __init__.py
 │   ├── conftest.py
 │   ├── test_cli.py
-│   └── test_core.py
+│   ├── test_core.py
+│   ├── test_gui.py             # Headless pytest-qt GUI tests
+│   └── test_main.py
 └── scripts/
     ├── run.py                  # Cross-platform fallback task runner
     └── init_project.py         # Project rename / bootstrap script
@@ -110,10 +114,20 @@ cargo binstall just
 Clone this template and sync dependencies:
 
 ```bash
+# Sync core environment and dev tools
 uv sync
+
+# Or sync with optional GUI support (PySide6)
+uv sync --all-extras
 ```
 
 `uv` will automatically download and install the required Python version if it's not already installed on your system.
+
+To install as a package with optional GUI support via pip:
+
+```bash
+pip install "template-python[gui]"
+```
 
 ---
 
@@ -123,7 +137,7 @@ You can use `just` or the built-in pure Python task runner `python scripts/run.p
 
 | Action | With `just` | With `python scripts/run.py` | With direct `uv` |
 | :--- | :--- | :--- | :--- |
-| **Install / Sync venv** | `just install` | `python scripts/run.py sync` | `uv sync` |
+| **Install / Sync venv** | `just install` | `python scripts/run.py sync` | `uv sync --all-groups --all-extras` |
 | **Lint & Style Check** | `just lint` | `python scripts/run.py lint` | `uv run ruff check . && uv run ruff format --check .` |
 | **Auto-Format Code** | `just format` | `python scripts/run.py format` | `uv run ruff format . && uv run ruff check --fix .` |
 | **Type Check** | `just typecheck` | `python scripts/run.py typecheck`| `uv run pyright` |
@@ -132,6 +146,7 @@ You can use `just` or the built-in pure Python task runner `python scripts/run.p
 | **Build Wheel & Sdist** | `just build` | `python scripts/run.py build` | `uv build` |
 | **Clean Artifacts** | `just clean` | `python scripts/run.py clean` | *(Removes dist/, cache, coverage)* |
 | **Run CLI Application** | `just run` | `uv run template-python` | `uv run template-python` |
+| **Run GUI Application** | `just gui` | `python scripts/run.py gui` | `uv run template-python-gui` *(or `uv run template-python --gui`)* |
 
 ---
 

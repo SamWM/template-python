@@ -2,6 +2,10 @@
 
 set shell := ["bash", "-uc"]
 set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
+set unstable
+set lists
+
+uv := if which("uv") == [] { "python -m uv" } else { "uv" }
 
 # Default recipe: list available commands
 default:
@@ -9,37 +13,41 @@ default:
 
 # Install all project and development dependencies into local .venv
 install:
-    uv sync --all-groups
+    {{uv}} sync --all-groups --all-extras
 
 # Run ruff lint and format checks
 lint:
-    uv run ruff check .
-    uv run ruff format --check .
+    {{uv}} run ruff check .
+    {{uv}} run ruff format --check .
 
 # Automatically format code and fix lint issues
 format:
-    uv run ruff format .
-    uv run ruff check --fix .
+    {{uv}} run ruff format .
+    {{uv}} run ruff check --fix .
 
 # Run Pyright static type checker
 typecheck:
-    uv run pyright
+    {{uv}} run pyright
 
 # Run test suite with code coverage
 test:
-    uv run pytest
+    {{uv}} run pytest
 
 # Run all quality checks (lint, typecheck, test)
 check: lint typecheck test
 
 # Build standard wheel and source distribution
 build:
-    uv build
+    {{uv}} build
 
 # Clean temporary files and build artifacts
 clean:
-    uv run python scripts/run.py clean
+    {{uv}} run python scripts/run.py clean
 
 # Run CLI application directly
 run *ARGS:
-    uv run template-python {{ARGS}}
+    {{uv}} run template-python {{ARGS}}
+
+# Run GUI application directly
+gui:
+    {{uv}} run template-python-gui
