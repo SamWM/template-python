@@ -27,6 +27,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Custom greeting message prefix (default: 'Hello')",
     )
     parser.add_argument(
+        "--gui",
+        action="store_true",
+        help="Launch the graphical user interface (GUI)",
+    )
+    parser.add_argument(
         "-v",
         "--version",
         action="version",
@@ -42,10 +47,23 @@ def main(argv: Sequence[str] | None = None) -> int:
         argv: Optional command-line argument list. Uses sys.argv if None.
 
     Returns:
-        Exit code (0 for success).
+        Exit code (0 for success, non-zero for error).
     """
     parser = build_parser()
     args = parser.parse_args(argv if argv is not None else sys.argv[1:])
+
+    if args.gui:
+        try:
+            from template_python.gui import main as gui_main
+        except ImportError:
+            sys.stderr.write(
+                "Error: GUI dependencies are not installed.\n"
+                "To enable GUI support, install with the [gui] extra:\n"
+                "  pip install template-python[gui]\n"
+                "  uv sync --extra gui\n"
+            )
+            return 1
+        return gui_main()
 
     greeting = greet(name=args.name, custom_message=args.message)
     print(greeting.format())
